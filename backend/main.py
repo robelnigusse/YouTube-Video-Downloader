@@ -1,7 +1,16 @@
 from fastapi import FastAPI, HTTPException
 import yt_dlp
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def get_url(url : str):
@@ -24,9 +33,9 @@ async def get_url(url : str):
                 seen_heights.add(height)
 
                 results.append({
-                    "format_id": f["format_id"],
+                    # "format_id": f["format_id"],
                     "resolution": height,
-                    "ext": ext,
+                    # "ext": ext,
                     "url": f["url"]
                 })
         return results
