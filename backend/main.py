@@ -1,32 +1,34 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import yt_dlp
 
 app = FastAPI()
 
 @app.get("/")
-async def root():
-    url = "https://www.youtube.com/watch?v=qzGxK6Uiu04"
+async def get_url(url : str):
+    if not url:
+        raise HTTPException(status_code=400, detail="No URL provided")
+    try:
+        with yt_dlp.YoutubeDL() as ydl:
+            info = ydl.extract_info(url, download=False)
 
-    with yt_dlp.YoutubeDL() as ydl:
-        info = ydl.extract_info(url, download=False)
+        results = []
+        seen_heights = set()
 
-    results = []
-    seen_heights = set()
+        allowed_heights = {360, 480, 720, 1080, 1440, 2160}
+        
+        for f in info["formats"]:
+            height = f.get("height")
+            ext = f.get("ext")
 
-    allowed_heights = {360, 480, 720, 1080, 1440, 2160}
+            if height in allowed_heights and ext == "mp4" and height not in seen_heights:
+                seen_heights.add(height)
 
-    for f in info["formats"]:
-        height = f.get("height")
-        ext = f.get("ext")
-
-        if height in allowed_heights and ext == "mp4" and height not in seen_heights:
-            seen_heights.add(height)
-
-            results.append({
-                "format_id": f["format_id"],
-                "resolution": height,
-                "ext": ext,
-                "url": f["url"]
-            })
-
-    return results
+                results.append({
+                    "format_id": f["format_id"],
+                    "resolution": height,
+                    "ext": ext,
+                    "url": f["url"]
+                })
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid URL")
