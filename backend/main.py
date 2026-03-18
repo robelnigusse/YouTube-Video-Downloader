@@ -31,13 +31,17 @@ async def get_url(url : str):
 
             if height in allowed_heights and ext == "mp4" and height not in seen_heights:
                 seen_heights.add(height)
-
                 results.append({
                     # "format_id": f["format_id"],
                     "resolution": height,
                     # "ext": ext,
                     "url": f["url"]
                 })
-        return results
+        return {
+            "title": info.get("title"),
+            "thumbnail": info.get("thumbnail"),
+            "formats": results
+        }
     except Exception as e:
-        raise HTTPException(status_code=400, detail="Invalid URL")
+        print(e)
+        raise HTTPException(status_code=400, detail=str(e))
