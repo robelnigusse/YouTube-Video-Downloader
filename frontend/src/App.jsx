@@ -13,7 +13,7 @@ function App() {
     setData(null);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/?url=${encodeURIComponent(url)}`);
+      const res = await fetch(`http://backend:8000/?url=${encodeURIComponent(url)}`);
       if (!res.ok) throw new Error("Failed to fetch video data. Check your url.");
       const result = await res.json();
       setData(result);
