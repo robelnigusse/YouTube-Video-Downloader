@@ -21,10 +21,36 @@ A simple web application that allows users to download YouTube videos by selecti
 * FastAPI
 * Video processing library (`yt-dlp`)
   
+### DevOps
 
-## 📦 Installation
+- Docker  
+- Docker Compose 
+  
+
+---
+
+## 📦 Getting Started
+
+You can run this project in **two ways**:
+
+---
+## 🐳 Option 1: Run with Docker (Recommended)
 
 ### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/youtube-downloader.git
+cd youtube-downloader
+```
+### 2. Build and start containers
+```bash
+docker-compose up --build
+```
+### 3. open the app
+- Frontend → http://localhost:3000
+
+
+## 💻 Option 2: Run Locally (Without Docker)
 
 ```bash
 git clone https://github.com/your-username/youtube-downloader.git
